@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laryngology: Patient Surgical Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- Colors & Typography --- */
+        :root {
+            /* Official Hex Codes from your reference */
+            --ccf-blue: #0078bf;
+            --ccf-green: #00843d;
+            --ccf-black: #4b4b45;
+            --ccf-white: #ffffff;
+            --bg-light: #f4f4f4;
+        }
+
+        body {
+            /* News Gothic first, then Roboto (CCF Web Standard), then generic sans */
+            font-family: 'News Gothic', 'News Gothic Bold', 'Roboto', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: var(--ccf-black);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+
+        /* --- Header --- */
+        header {
+            background-color: var(--ccf-white);
+            color: var(--ccf-blue);
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom: 4px solid var(--ccf-green); /* Green accent bar */
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ccf-blue);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            margin-top: 5px;
+            font-size: 1.2rem;
+            color: var(--ccf-black);
+            font-weight: 400;
+        }
+
+        /* --- Layout --- */
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            background: var(--ccf-white);
+            border-radius: 4px; /* Slightly sharper corners for a more clinical look */
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+            min-height: 60vh;
+        }
+
+        /* --- Tabs Navigation --- */
+        .tabs {
+            display: flex;
+            background-color: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--ccf-black);
+            font-family: inherit;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 4px solid transparent;
+        }
+
+        .tab-btn:hover {
+            background-color: #e2e2e2;
+            color: var(--ccf-blue);
+        }
+
+        .tab-btn.active {
+            background-color: var(--ccf-white);
+            color: var(--ccf-blue);
+            border-bottom: 4px solid var(--ccf-blue);
+        }
+
+        /* --- Tab Content --- */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content h2 {
+            color: var(--ccf-black);
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* --- Accordion (Collapsible Sections) --- */
+        .accordion {
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+            background: var(--ccf-white);
+        }
+
+        .accordion-header {
+            background-color: #ffffff;
+            padding: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid transparent;
+            transition: background-color 0.2s;
+        }
+
+        .accordion-header:hover {
+            background-color: #f1f7fc; /* Very light blue hover */
+        }
+
+        .accordion-header h3 {
+            margin: 0;
+            color: var(--ccf-blue);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .accordion-header.active {
+            background-color: #f1f7fc;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .accordion-header::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--ccf-green);
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .accordion-header.active::after {
+            content: '\2212'; /* Minus sign */
+        }
+
+        .accordion-body {
+            display: none;
+            padding: 1.5rem;
+            background-color: #fff;
+            color: #333;
+        }
+
+        .accordion-body.show {
+            display: block;
+        }
+
+        /* --- Content Styling --- */
+        .section-label {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            color: var(--ccf-green);
+            font-weight: 700;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .section-label:first-of-type {
+            margin-top: 0;
+        }
+
+        .tech-term {
+            font-style: italic;
+            color: #555;
+            margin-bottom: 1rem;
+            font-family: 'Georgia', serif; /* Serif for contrast on tech terms */
+        }
+
+        .warning-box {
+            background-color: #fff8e1; /* Light yellow */
+            border-left: 5px solid #ffc107;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            color: #4b4b45;
+            font-size: 0.95rem;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile adjustments */
+        @media (max-width: 600px) {
+            .tabs {
+                flex-direction: column;
+            }
+            .tab-btn {
+                text-align: left;
+                padding: 1rem;
+                border-bottom: 1px solid #ddd;
+                border-left: 4px solid transparent;
+            }
+            .tab-btn.active {
+                border-bottom: 1px solid #ddd;
+                border-left: 4px solid var(--ccf-blue);
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Laryngology: Patient Surgical Guide</h1>
+</header>
+
+<div class="container">
+    <div class="tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'airway')">Airway Surgery</button>
+        <button class="tab-btn" onclick="openTab(event, 'voice')">Voice Surgery</button>
+        <button class="tab-btn" onclick="openTab(event, 'swallow')">Swallow Surgery</button>
+    </div>
+
+    <div id="airway" class="tab-content active">
+        <h2>Airway Surgery</h2>
+        <p>Procedures designed to improve breathing and airway patency.</p>
+        
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Airway Dilation</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, steroid injection, lysis of adhesion and balloon dilation</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and airway. Steroid is injected into the scar, small cuts are made and a balloon is used to stretch open the airway.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You may have a minor sore throat and voice changes, but this should not last long.</li>
+                    <li>Over the counter Tylenol and ibuprofen are OK to take and usually enough to manage any discomfort.</li>
+                    <li>You may be groggy the day of surgery from anesthesia but usually you can return to your normal activities the day after surgery.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Cordotomy</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, cordotomy/arytenoidectomy</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and airway. A portion of the vocal cord is removed to open up the airway. Sometimes steroids may be injected to help healing or a balloon may be used to stretch up the airway.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You may have a minor sore throat and voice changes, but this should not last long.</li>
+                    <li>Over the counter Tylenol and ibuprofen are OK to take and usually enough to manage any discomfort, but your surgeon may prescribe a short course of pain medication.</li>
+                    <li>Most likely you will spend one night in the hospital to make sure you are healing alright.</li>
+                    <li>It is possible you may have some changes to your swallow after surgery, but this is uncommon and usually short-lived. This is something we will watch out for when you are in the hospital.</li>
+                    <li>Once you are out of the hospital you can return to normal activities in a few days, as soon as you feel able.</li>
+                    <li>We may send you home with a steroid inhaler and reflux medication.</li>
+                    <li><strong>Important:</strong> You must avoid smoking or vaping after surgery for appropriate healing and keep your blood sugar controlled if you have diabetes.</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>Long Term Effects:</strong> After this surgery, we expect you to have long term voice changes. The voice may be breathier and weaker. This is an expected trade off from having an improved airway.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Tracheostomy</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Tracheostomy</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, an incision is made in the front of your neck. We create a hole into your windpipe and place a tracheostomy tube—this is a plastic appliance you will breathe from.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You will need to stay in the hospital for several days after surgery to allow the tracheostomy tube to heal.</li>
+                    <li>The trach tube will be stitched into your neck for a few days until it is well healed. Once the trach is healed well enough, it will be changed. At this point it is usually safe to go home with the tracheostomy tube.</li>
+                    <li>It may be more difficult to speak and swallow until this trach is changed. At this point you may be fitted with a special valve to help you speak with the trach.</li>
+                    <li>Our nursing team will help teach you how to take care of the trach and make sure you have supplies to care for it safely at home.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="voice" class="tab-content">
+        <h2>Voice Surgery</h2>
+        <p>Procedures focused on vocal fold lesions, voice quality, and augmentation.</p>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Microflap Excision</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, microflap excision of lesion</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and airway. The lesion on your vocal fold is carefully removed using a microscope and special instruments and the vocal cord may be reconstructed using what is called a microflap.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You may have a minor sore throat and voice changes, but this should not last long.</li>
+                    <li>Over the counter Tylenol and ibuprofen are OK to take and usually enough to manage any discomfort.</li>
+                    <li>You may be groggy the day of surgery from anesthesia but usually you can return to most your normal activities the day after surgery.</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>Voice Rest:</strong> This is often the most challenging part of recovery. Your surgeon may put you on “voice rest”. This means no talking, whispering, humming or voicing for a few days (usually 4 days) after surgery. After this you usually can slowly return to normal voicing over the course of 1-2 weeks. You may be restricted from high level voice use (shouting or singing performance) for 6 weeks after surgery.
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Restylane Injection</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, injection laryngoplasty</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and airway. A filler (Restylane) is injected into the vocal cord to plump it up and make voicing easier.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You may have a minor sore throat and voice changes, but this should not last long.</li>
+                    <li>Over the counter Tylenol and ibuprofen are OK to take and usually enough to manage any discomfort.</li>
+                    <li>You may be groggy the day of surgery from anesthesia but usually you can return to your normal activities the day after surgery.</li>
+                    <li>You should notice a change in your voice right away. It might be a little unstable or feel tight for a few days, but you should notice an improvement after a few days.</li>
+                </ul>
+                <p><em>Note: The filler lasts on average 12 weeks.</em></p>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Medialization Laryngoplasty</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Medialization Laryngoplasty or Thyroplasty</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>In the operating room, you will be put to sleep for only a few minutes so the surgeon can inject numbing medicine into your neck. You will then be woken up, but you will still remain on the surgical table and have sterile drapes covering you. You may feel some light tugging and pressure during the procedure but you should not feel pain.</p>
+                <p>Your surgeon will make an incision in the front of your neck to get down to the cartilage of your voice box (“Adam’s apple”) and drill a hole through the cartilage so that an implant can be placed to push over the vocal cord. A flexible scope may be passed through your nose during the procedure. We keep you awake so we can position the implant perfectly and also test out your voice.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>We usually place a small drain that can come out the day after surgery. You and your surgeon will determine a plan for drain removal.</li>
+                    <li>You can shower the day after surgery but do not submerge the incision in water for 4 weeks. Keep the area clean and dry (except for showering). Soap and water is usually sufficient.</li>
+                    <li>Avoid lifting anything heavier than a milk jug for 2 weeks after surgery.</li>
+                    <li>Your voice might became froggy and gravely a few hours after surgery and that may last a few weeks. This is normal, but you should notice that it is easier to get the voice out and project.</li>
+                    <li>We usually will send you home with an antibiotic, a steroid and a short course of pain medications.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="swallow" class="tab-content">
+        <h2>Swallow Surgery</h2>
+        <p>Interventions aimed at improving swallowing function and treating pouches.</p>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Balloon Dilation</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, rigid esophagoscopy with balloon dilation</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and the beginning of your esophagus. We then place a balloon here and stretch out the first part of your esophagus.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You may have a minor sore throat and voice changes, but this should not last long.</li>
+                    <li>Over the counter Tylenol and ibuprofen are OK to take and usually enough to manage any discomfort.</li>
+                    <li>You may be groggy the day of surgery from anesthesia but usually you can return to your normal activities the day after surgery, including your usual diet.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Cricopharyngeal Botox</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, rigid esophagoscopy with balloon dilation and botox injection</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and the beginning of your esophagus. We then inject botox into the muscle at the top of your esophagus (cricopharyngeus muscle). Often we will dilate with a balloon.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You may have a minor sore throat and voice changes, but this should not last long.</li>
+                    <li>Over the counter Tylenol and ibuprofen are OK to take and usually enough to manage any discomfort.</li>
+                    <li>You may be groggy the day of surgery from anesthesia but usually you can return to your normal activities the day after surgery, including your usual diet.</li>
+                    <li>You may start to notice the changes from the botox 48 hours after surgery.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Cricopharyngeal Myotomy</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Direct laryngoscopy, cricopharyngeal myotomy</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see your voicebox and the beginning of your esophagus. We then use a laser to cut the muscle at the top of the esophagus.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You will need to come into the hospital for observation. A feeding tube may be placed at the time of surgery while you are healing.</li>
+                    <li>Usually you are not allowed to eat the night of surgery and we perform a swallow test the next morning to make sure there are no leaks in the throat after the procedure.</li>
+                    <li>If there is no leak, we start you on a liquid diet and you can go home if you do well with this.</li>
+                    <li>If there is a leak, you may need to spend more time with the feeding tube and in the hospital to heal.</li>
+                </ul>
+                <p><em>Note: In some circumstances we perform this surgery with an incision in the neck, but your surgeon will discuss this with you if you are a candidate for this approach.</em></p>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Zenker’s Surgery (Endoscopic)</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Endoscopic Zenker’s Diverticulotomy</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, we use a scope that is inserted in your mouth to see the pouch and esophagus. A laser or stapler device is used to cut the wall in between the two so food no longer collects there.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You will need to come into the hospital for observation.</li>
+                    <li>A feeding tube may be placed at the time of surgery while you are healing.</li>
+                    <li>Usually you are not allowed to eat the night of surgery and we perform a swallow test the next morning to make sure there are no leaks in the throat after the procedure.</li>
+                    <li>If there is no leak, we start you on a liquid diet and you can go home if you do well with this.</li>
+                    <li>If there is a leak, you may need to spend more time with the feeding tube and in the hospital to heal.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="accordion">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h3>Zenker’s Surgery (Open)</h3>
+            </div>
+            <div class="accordion-body">
+                <span class="section-label">Technical Terms</span>
+                <div class="tech-term">Open Zenker’s Diverticulectomy/Diverticulopexy</div>
+
+                <span class="section-label">Layman's Terms</span>
+                <p>After you are asleep, an incision is made in the neck to get to the pouch. We either cut out the pouch and sew the throat back together or tack the pouch to the spine so it is flipped. The muscle that caused the pouch (cricopharyngeus muscle) will also be cut.</p>
+
+                <span class="section-label">Post-Op Care</span>
+                <ul>
+                    <li>You will need to come into the hospital for observation.</li>
+                    <li>A feeding tube may be placed at the time of surgery while you are healing.</li>
+                    <li>Usually you are not allowed to eat the night of surgery and we perform a swallow test the next morning to make sure there are no leaks in the throat after the procedure.</li>
+                    <li>If there is no leak, we start you on a liquid diet and you can go home if you do well with this.</li>
+                    <li>If there is a leak, you may need to spend more time with the feeding tube and in the hospital to heal.</li>
+                    <li>There also usually is a drain placed in the neck that will be removed when the drainage is low enough.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabContent, tabBtns;
+        
+        // Hide all tab content
+        tabContent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+            tabContent[i].className = tabContent[i].className.replace(" active", "");
+        }
+
+        // Remove active class from all buttons
+        tabBtns = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tabBtns.length; i++) {
+            tabBtns[i].className = tabBtns[i].className.replace(" active", "");
+        }
+
+        // Show current tab and add active class to button
+        document.getElementById(tabName).style.display = "block";
+        document.getElementById(tabName).className += " active";
+        evt.currentTarget.className += " active";
+    }
+
+    function toggleAccordion(element) {
+        element.classList.toggle("active");
+        var body = element.nextElementSibling;
+        if (body.classList.contains("show")) {
+            body.classList.remove("show");
+        } else {
+            body.classList.add("show");
+        }
+    }
+</script>
+
+</body>
+</html>
